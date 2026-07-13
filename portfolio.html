@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>guest@portfolio:~$</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=VT323&display=swap');
+
+/* ============ CONFIG-DRIVEN TOKENS ============ */
+:root{
+  --bg:#060a06;
+  --bg-panel:#0b120b;
+  --fg:#39ff39;
+  --fg-dim:#1e8f1e;
+  --fg-bright:#b6ffb6;
+  --amber:#ffb000;
+  --border:#1e6e1e;
+  --scanline-op:0.06;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+  --vt: 'VT323', var(--mono);
+}
+
+*{box-sizing:border-box;}
+html,body{
+  margin:0; padding:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--mono);
+  min-height:100%;
+}
+body{
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* subtle phosphor glow on all text */
+body{ text-shadow:0 0 1px rgba(57,255,57,0.35); }
+
+a{ color:var(--fg-bright); }
+
+::selection{ background:var(--fg); color:#042704; }
+
+/* ============ CRT SCREEN OVERLAY ============ */
+.crt-overlay{
+  pointer-events:none;
+  position:fixed; inset:0; z-index:50;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,var(--scanline-op)) 0px,
+      rgba(0,0,0,var(--scanline-op)) 1px,
+      transparent 2px,
+      transparent 3px
+    );
+  mix-blend-mode:multiply;
+}
+.crt-vignette{
+  pointer-events:none;
+  position:fixed; inset:0; z-index:49;
+  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 120%);
+}
+.crt-flicker{
+  pointer-events:none;
+  position:fixed; inset:0; z-index:48;
+  background:rgba(57,255,57,0.02);
+  animation:flicker 6.5s infinite;
+}
+@keyframes flicker{
+  0%,100%{ opacity:1; }
+  92%{ opacity:1; }
+  93%{ opacity:0.85; }
+  94%{ opacity:1; }
+  96%{ opacity:0.9; }
+  97%{ opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .crt-flicker{ animation:none; }
+  *{ scroll-behavior:auto !important; }
+}
+
+/* ============ BOOT SCREEN ============ */
+#boot{
+  position:fixed; inset:0; z-index:100;
+  background:var(--bg); color:var(--fg);
+  padding:6vh 4vw;
+  font-size:14px;
+  white-space:pre-wrap;
+  overflow:hidden;
+}
+#boot.hidden{ display:none; }
+#boot .cursor-blink{ animation:blink 1s steps(1) infinite; }
+
+/* ============ LAYOUT / WINDOW CHROME ============ */
+html{ scroll-behavior:smooth; }
+
+#app.hidden{ display:none; }
+
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  padding:32px 16px 120px;
+}
+
+.terminal-window{
+  border:1px solid var(--border);
+  background:var(--bg-panel);
+  box-shadow:0 0 0 1px rgba(57,255,57,0.05), 0 0 40px rgba(57,255,57,0.06);
+}
+
+.title-bar{
+  display:flex; align-items:center; gap:8px;
+  padding:8px 12px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(57,255,57,0.06), transparent);
+  font-size:13px;
+  color:var(--fg-dim);
+}
+.dot{ width:9px; height:9px; border-radius:50%; border:1px solid var(--fg-dim); }
+.title-bar .path{ margin-left:8px; letter-spacing:0.5px; }
+
+.term-body{ padding:20px 22px 8px; }
+
+/* ============ ASCII BANNER ============ */
+.banner{
+  font-family:var(--vt);
+  font-size:20px;
+  line-height:1.15;
+  color:var(--fg-bright);
+  white-space:pre;
+  overflow-x:auto;
+  margin:4px 0 14px;
+}
+.subtitle{ color:var(--fg-dim); margin-bottom:18px; }
+.subtitle .role{ color:var(--fg); }
+
+/* ============ PROMPT LINE STYLING ============ */
+.prompt-line{ color:var(--fg-dim); }
+.prompt-user{ color:var(--fg-bright); }
+.prompt-path{ color:var(--amber); }
+.prompt-sym{ color:var(--fg); }
+
+/* ============ NAV (ls listing) ============ */
+nav.ls{ margin:10px 0 26px; }
+nav.ls .listing{ display:flex; flex-direction:column; gap:2px; }
+nav.ls button{
+  all:unset;
+  cursor:pointer;
+  color:var(--fg);
+  padding:2px 4px;
+  border-radius:2px;
+}
+nav.ls button:hover, nav.ls button:focus-visible{
+  background:rgba(57,255,57,0.12);
+  outline:1px solid var(--fg-dim);
+}
+nav.ls .perm{ color:var(--fg-dim); margin-right:10px; }
+nav.ls .dirname{ color:var(--fg-bright); }
+nav.ls .dirname::after{ content:"/"; color:var(--fg-dim); }
+
+/* ============ SECTIONS ============ */
+section.block{
+  margin:38px 0;
+  padding-top:14px;
+  border-top:1px dashed var(--border);
+}
+section.block:first-of-type{ border-top:none; }
+
+.cmd-echo{
+  color:var(--fg-dim);
+  margin-bottom:10px;
+}
+.cmd-echo .typed{ color:var(--fg-bright); }
+
+h2.file-head{
+  margin:0 0 6px;
+  font-size:15px;
+  font-weight:700;
+  color:var(--fg-bright);
+}
+h2.file-head::before{ content:"## "; color:var(--fg-dim); }
+
+p{ margin:0 0 12px; color:var(--fg); }
+p.dim, .meta{ color:var(--fg-dim); }
+
+/* ============ PROJECT ENTRIES (details/summary) ============ */
+.entry{
+  border:1px solid var(--border);
+  margin-bottom:10px;
+  background:rgba(57,255,57,0.02);
+}
+.entry summary{
+  cursor:pointer;
+  padding:10px 12px;
+  list-style:none;
+  display:flex;
+  gap:10px;
+  align-items:baseline;
+  flex-wrap:wrap;
+}
+.entry summary::-webkit-details-marker{ display:none; }
+.entry summary::before{
+  content:"▸";
+  color:var(--fg-dim);
+  transition:transform .15s ease;
+}
+.entry[open] summary::before{ content:"▾"; }
+.entry summary:focus-visible{ outline:1px solid var(--fg); }
+.entry .fname{ color:var(--fg-bright); font-weight:700; }
+.entry .ftag{ color:var(--amber); font-size:12.5px; }
+.entry .fsize{ color:var(--fg-dim); font-size:12.5px; margin-left:auto; }
+.entry .body{ padding:0 14px 14px 30px; color:var(--fg); }
+.entry .stack{ color:var(--fg-dim); }
+.entry .stack span{ color:var(--fg); }
+
+/* ============ CONTACT ============ */
+.contact-list{ list-style:none; padding:0; margin:0; }
+.contact-list li{ margin:4px 0; }
+.contact-list .k{ color:var(--fg-dim); display:inline-block; width:90px; }
+
+/* ============ LIVE PROMPT ============ */
+#live-log{
+  min-height:20px;
+  margin-bottom:6px;
+}
+#live-log .line{ margin:2px 0; }
+#live-log .out{ color:var(--fg); }
+#live-log .err{ color:var(--amber); }
+.live-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.live-row input{
+  all:unset;
+  flex:1 1 200px;
+  color:var(--fg-bright);
+  font-family:var(--mono);
+  font-size:15px;
+  caret-color:var(--fg);
+  min-width:80px;
+}
+.live-row input:focus{ outline:none; }
+
+.cursor{
+  display:inline-block; width:8px; height:1em;
+  background:var(--fg); vertical-align:text-bottom;
+  animation:blink 1s steps(1) infinite;
+  margin-left:2px;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+footer.foot{
+  margin-top:40px; padding-top:14px;
+  border-top:1px dashed var(--border);
+  color:var(--fg-dim); font-size:13px;
+}
+
+/* ============ SCROLLBAR ============ */
+::-webkit-scrollbar{ width:10px; }
+::-webkit-scrollbar-track{ background:var(--bg); }
+::-webkit-scrollbar-thumb{ background:var(--fg-dim); border:2px solid var(--bg); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:640px){
+  body{ font-size:14px; }
+  .banner{ font-size:13px; }
+  .wrap{ padding:20px 10px 100px; }
+  .entry .body{ padding-left:16px; }
+  nav.ls .perm{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="crt-overlay"></div>
+<div class="crt-vignette"></div>
+<div class="crt-flicker"></div>
+
+<!-- ===================== BOOT SEQUENCE ===================== -->
+<div id="boot"><span id="boot-text"></span><span class="cursor-blink">▊</span></div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div id="app" class="hidden">
+  <div class="wrap">
+    <div class="terminal-window">
+
+      <div class="title-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="path" id="titlebar-path">guest@portfolio: ~</span>
+      </div>
+
+      <div class="term-body">
+
+        <pre class="banner" id="banner"></pre>
+        <div class="subtitle">
+          <span class="role" id="role-text">Software Developer</span> — <span id="tagline-text">embedded systems &amp; creative tinkering</span><br>
+          <span class="meta">type <b>help</b> in the prompt below, or click a directory to jump there</span>
+        </div>
+
+        <!-- NAV -->
+        <nav class="ls" aria-label="Section navigation">
+          <div class="prompt-line"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> ls -la ./portfolio</div>
+          <div class="listing" id="nav-listing" role="list"></div>
+        </nav>
+
+        <!-- SECTIONS: populated by JS from CONFIG so content + code stay in one place -->
+        <div id="sections"></div>
+
+        <!-- CONTACT -->
+        <section class="block" id="contact">
+          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">cat contact.txt</span></div>
+          <h2 class="file-head">contact.txt</h2>
+          <ul class="contact-list" id="contact-list"></ul>
+        </section>
+
+        <!-- LIVE INTERACTIVE PROMPT -->
+        <section class="block" id="live-terminal">
+          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">exec ./shell</span></div>
+          <div id="live-log"></div>
+          <div class="live-row">
+            <span class="prompt-line"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span></span>
+            <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal command input" placeholder="type 'help'">
+          </div>
+        </section>
+
+        <footer class="foot">
+          <span id="footer-line"></span>
+        </footer>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======================================================================
+   CONFIG — edit everything in here to make this your own.
+   Nothing below this block needs to change for basic customization.
+   ====================================================================== */
+const CONFIG = {
+  username: "guest",
+  displayName: "Aldo Mosca",
+  role: "Software Developer",
+  tagline: "embedded systems & creative tinkering",
+
+  about: {
+    body: [
+      "Hi — I'm Aldo. I make things that hover over the intersection of hardware and software: firmware, protocol stacks, generative art, sound, and occasional soldering-iron wielding.",
+      "Lately I've been deep in embedded and IoT work — device commissioning, protocol compliance, and the kind of debugging that ends with a logic analyzer at 1am. Outside of that, I like projects with an immediate feedback loop: something that moves, makes sound, or lights up.",
+      "This site is organized like a filesystem, because that felt more honest than a hero image and a call-to-action button."
+    ]
+  },
+
+  // Each project: name, tag (small category label), stack (array), size (flavor text), summary (1-2 sentences)
+  programming: [
+    { name: "project-alpha.cpp",  tag: "TOOLING",   stack: ["C++", "CMake"],        size: "2.4K loc", summary: "Replace with a real project — a CLI tool, library, or service you've built. One or two sentences on the problem it solves and the interesting technical decision behind it." },
+    { name: "project-beta.py",    tag: "AUTOMATION",stack: ["Python", "pytest"],    size: "890 loc",  summary: "Another slot for a programming project. Mention scale, constraints, or a bug you're proud of squashing." }
+  ],
+  iot: [
+    { name: "matter-node.fw",   tag: "FIRMWARE", stack: ["C++", "Matter", "Thread"], size: "firmware", summary: "A Matter/Thread device project — commissioning flow, cluster implementation, or a chiptool-based test harness. Describe the device and what protocol behavior you validated." },
+    { name: "thermostat-rig",  tag: "HARDWARE", stack: ["ESP32", "KiCad"],          size: "hardware", summary: "A hardware-adjacent IoT build — wiring, sensor integration, or a custom board. Note what it controls and how it talks to the network." }
+  ],
+  animation: [
+    { name: "loop-01.mov",  tag: "MOTION",  stack: ["After Effects"], size: "0:14", summary: "Swap in a real animation project — a short loop, title sequence, or generative piece. Note the tools and what you were exploring." },
+    { name: "study-02.mp4", tag: "STUDY",   stack: ["Blender"],       size: "0:08", summary: "A second animation slot. Link to a hosted video if you have one." }
+  ],
+  music: [
+    { name: "track-01.wav", tag: "COMPOSITION", stack: ["Ableton"], size: "3:12", summary: "Drop in a real track — genre, instrumentation, or the concept behind it. Link out to Bandcamp/SoundCloud if hosted elsewhere." },
+    { name: "track-02.wav", tag: "SOUND-DESIGN", stack: ["Max/MSP"], size: "2:05", summary: "A second music slot, e.g. sound design work, a collaboration, or a live set." }
+  ],
+
+  contact: [
+    { k: "email",  v: "contact@aldo-mosca.com", href: "mailto:contact@aldo-mosca.com" },
+    { k: "github", v: "github.com/aldo-mosca", href: "https://github.com/aldo-mosca" },
+    { k: "site",   v: "aldo-mosca.com", href: "#" }
+  ]
+};
+
+/* ======================================================================
+   RENDER — builds the DOM from CONFIG. You shouldn't need to touch this.
+   ====================================================================== */
+const SECTIONS = [
+  { id: "about",       dir: "about-me",              perm: "drwxr-xr-x", cmd: "cat about.txt" },
+  { id: "programming", dir: "projects-programming",  perm: "drwxr-xr-x", cmd: "ls -la ./projects/programming" },
+  { id: "iot",         dir: "projects-iot",          perm: "drwxr-xr-x", cmd: "ls -la ./projects/iot" },
+  { id: "animation",   dir: "projects-animation",    perm: "drwxr-xr-x", cmd: "ls -la ./projects/animation" },
+  { id: "music",       dir: "projects-music",        perm: "drwxr-xr-x", cmd: "ls -la ./projects/music" }
+];
+
+function el(tag, attrs={}, ...children){
+  const node = document.createElement(tag);
+  for(const [k,v] of Object.entries(attrs)){
+    if(k === "class") node.className = v;
+    else if(k === "html") node.innerHTML = v;
+    else node.setAttribute(k, v);
+  }
+  children.forEach(c => { if(typeof c === "string") node.appendChild(document.createTextNode(c)); else if(c) node.appendChild(c); });
+  return node;
+}
+
+function renderNav(){
+  const listing = document.getElementById("nav-listing");
+  SECTIONS.forEach(s => {
+    const btn = el("button", { type:"button", "data-target": s.id },
+      el("span", { class:"perm" }, s.perm + "  "),
+      el("span", { class:"dirname" }, s.dir)
+    );
+    btn.addEventListener("click", () => jumpTo(s.id, s.dir));
+    const row = el("div", { role:"listitem" }, btn);
+    listing.appendChild(row);
+  });
+}
+
+function projectEntry(p){
+  const entry = el("details", { class:"entry" });
+  const summary = el("summary", {},
+    el("span", { class:"fname" }, p.name),
+    el("span", { class:"ftag" }, "[" + p.tag + "]"),
+    el("span", { class:"fsize" }, p.size)
+  );
+  const body = el("div", { class:"body" },
+    el("p", {}, p.summary),
+    el("p", { class:"stack" }, "stack: " + p.stack.map(s=>s).join(", "))
+  );
+  entry.appendChild(summary);
+  entry.appendChild(body);
+  return entry;
+}
+
+function renderSections(){
+  const root = document.getElementById("sections");
+
+  // about
+  const about = el("section", { class:"block", id:"about" });
+  about.appendChild(el("div", { class:"cmd-echo" },
+    el("span", { class:"prompt-user" }, CONFIG.username), document.createTextNode("@"),
+    el("span", { class:"prompt-path" }, "portfolio"), el("span", { class:"prompt-sym" }, ":~$ "),
+    el("span", { class:"typed" }, "cat about.txt")
+  ));
+  about.appendChild(el("h2", { class:"file-head" }, "about.txt"));
+  CONFIG.about.body.forEach(line => about.appendChild(el("p", {}, line)));
+  root.appendChild(about);
+
+  // project sections
+  const groups = [
+    { id:"programming", title:"./projects/programming/", data: CONFIG.programming },
+    { id:"iot",         title:"./projects/iot/",         data: CONFIG.iot },
+    { id:"animation",   title:"./projects/animation/",   data: CONFIG.animation },
+    { id:"music",       title:"./projects/music/",       data: CONFIG.music }
+  ];
+  groups.forEach(g => {
+    const sec = el("section", { class:"block", id:g.id });
+    sec.appendChild(el("div", { class:"cmd-echo" },
+      el("span", { class:"prompt-user" }, CONFIG.username), document.createTextNode("@"),
+      el("span", { class:"prompt-path" }, "portfolio"), el("span", { class:"prompt-sym" }, ":~$ "),
+      el("span", { class:"typed" }, "ls -la " + g.title)
+    ));
+    sec.appendChild(el("h2", { class:"file-head" }, g.title));
+    g.data.forEach(p => sec.appendChild(projectEntry(p)));
+    root.appendChild(sec);
+  });
+}
+
+function renderContact(){
+  const ul = document.getElementById("contact-list");
+  CONFIG.contact.forEach(c => {
+    const li = el("li", {},
+      el("span", { class:"k" }, c.k), el("a", { href: c.href, target: c.href.startsWith("http") ? "_blank" : "_self", rel:"noopener" }, c.v)
+    );
+    ul.appendChild(li);
+  });
+}
+
+function jumpTo(id, dir){
+  const target = document.getElementById(id);
+  if(!target) return;
+  target.scrollIntoView({ behavior:"smooth", block:"start" });
+  document.getElementById("titlebar-path").textContent = CONFIG.username + "@portfolio: ~/" + dir;
+  target.style.transition = "background-color .15s ease";
+  target.style.backgroundColor = "rgba(57,255,57,0.07)";
+  setTimeout(()=>{ target.style.backgroundColor = "transparent"; }, 350);
+}
+
+/* ======================================================================
+   LIVE INTERACTIVE SHELL
+   ====================================================================== */
+function initShell(){
+  const input = document.getElementById("cmd-input");
+  const log = document.getElementById("live-log");
+  const history = [];
+  let hIndex = -1;
+
+  const NAV_MAP = { about:"about", "about-me":"about", programming:"programming", animation:"animation", music:"music", iot:"iot" };
+
+  function print(text, cls="out"){
+    const line = el("div", { class:"line " + cls }, text);
+    log.appendChild(line);
+    log.scrollIntoView({ block:"nearest" });
+  }
+
+  function echo(cmdText){
+    print("guest@portfolio:~$ " + cmdText, "");
+  }
+
+  function run(raw){
+    const cmd = raw.trim();
+    if(cmd.length === 0) return;
+    history.push(cmd); hIndex = history.length;
+    echo(cmd);
+    const [base, ...args] = cmd.split(/\s+/);
+
+    switch(base.toLowerCase()){
+      case "help":
+        print("available commands:");
+        print("  help                 show this list");
+        print("  about                jump to about-me");
+        print("  cd <section>         about | programming | animation | music | iot | contact");
+        print("  ls                   list sections");
+        print("  whoami               print current user");
+        print("  date                 print current date/time");
+        print("  clear                clear this session log");
+        print("  sudo <anything>      try it and see");
+        break;
+      case "ls":
+        print(SECTIONS.map(s=>s.dir + "/").join("   "));
+        break;
+      case "cd": {
+        const argRaw = (args[0]||"").replace(/^\.?\/?/,"").toLowerCase();
+        const key = NAV_MAP[argRaw] || (argRaw === "" ? null : argRaw);
+        if(key && document.getElementById(key)){
+          const s = SECTIONS.find(s=>s.id===key);
+          jumpTo(key, s ? s.dir : key);
+          print("→ jumped to " + key);
+        } else if(argRaw === "contact" && document.getElementById("contact")){
+          jumpTo("contact","contact");
+          print("→ jumped to contact");
+        } else {
+          print("cd: no such directory: " + (args[0]||""), "err");
+        }
+        break;
+      }
+      case "about": jumpTo("about","about-me"); print("→ jumped to about-me"); break;
+      case "programming": jumpTo("programming","projects-programming"); print("→ jumped to projects/programming"); break;
+      case "animation": jumpTo("animation","projects-animation"); print("→ jumped to projects/animation"); break;
+      case "music": jumpTo("music","projects-music"); print("→ jumped to projects/music"); break;
+      case "iot": jumpTo("iot","projects-iot"); print("→ jumped to projects/iot"); break;
+      case "contact": jumpTo("contact","contact"); print("→ jumped to contact"); break;
+      case "whoami": print(CONFIG.username); break;
+      case "date": print(new Date().toString()); break;
+      case "clear": log.innerHTML = ""; break;
+      case "sudo": print(CONFIG.username + " is not in the sudoers file. This incident will be reported.", "err"); break;
+      default:
+        print(base + ": command not found. type 'help' for a list of commands.", "err");
+    }
+  }
+
+  input.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      run(input.value);
+      input.value = "";
+    } else if(e.key === "ArrowUp"){
+      if(history.length){ hIndex = Math.max(0, hIndex-1); input.value = history[hIndex] || ""; }
+      e.preventDefault();
+    } else if(e.key === "ArrowDown"){
+      if(history.length){ hIndex = Math.min(history.length, hIndex+1); input.value = history[hIndex] || ""; }
+      e.preventDefault();
+    }
+  });
+
+  document.getElementById("live-terminal").addEventListener("click", () => input.focus());
+}
+
+/* ======================================================================
+   BOOT SEQUENCE
+   ====================================================================== */
+const BOOT_LINES = [
+  "PORTFOLIO v1.0.0 (build: static-html)",
+  "Initializing display ........... OK",
+  "Loading drivers................. OK",
+  "Frobulating..................... OK",
+  "Mounting /home/" + CONFIG.username + "..................... OK",
+  "Starting terminal session..............",
+  "",
+  "Welcome. Type 'help' once loaded to begin."
+];
+
+function runBoot(cb){
+  const bootTextEl = document.getElementById("boot-text");
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(prefersReduced){
+    bootTextEl.textContent = BOOT_LINES.join("\n");
+    setTimeout(cb, 300);
+    return;
+  }
+  let li = 0, ci = 0;
+  let buffer = "";
+  function step(){
+    if(li >= BOOT_LINES.length){ setTimeout(cb, 350); return; }
+    const line = BOOT_LINES[li];
+    if(ci <= line.length){
+      bootTextEl.textContent = buffer + line.slice(0, ci);
+      ci++;
+      setTimeout(step, 8 + Math.random()*10);
+    } else {
+      buffer += line + "\n";
+      li++; ci = 0;
+      setTimeout(step, 90);
+    }
+  }
+  step();
+}
+
+/* ======================================================================
+   INIT
+   ====================================================================== */
+function paintConfig(){
+  document.getElementById("titlebar-path").textContent = CONFIG.username + "@portfolio: ~";
+  document.getElementById("role-text").textContent = CONFIG.role;
+  document.getElementById("tagline-text").textContent = CONFIG.tagline;
+  document.getElementById("banner").textContent =
+` $$$$$$\\  $$\\       $$\\                 $$\\      $$\\                                        
+$$  __$$\\ $$ |      $$ |                $$$\\    $$$ |                                       
+$$ /  $$ |$$ | $$$$$$$ | $$$$$$\\        $$$$\\  $$$$ | $$$$$$\\   $$$$$$$\\  $$$$$$$\\ $$$$$$\\  
+$$$$$$$$ |$$ |$$  __$$ |$$  __$$\\       $$\\$$\\$$ $$ |$$  __$$\\ $$  _____|$$  _____|\\____$$\\ 
+$$  __$$ |$$ |$$ /  $$ |$$ /  $$ |      $$ \\$$$  $$ |$$ /  $$ |\\$$$$$$\\  $$ /      $$$$$$$ |
+$$ |  $$ |$$ |$$ |  $$ |$$ |  $$ |      $$ |\\$  /$$ |$$ |  $$ | \\____$$\\ $$ |     $$  __$$ |
+$$ |  $$ |$$ |\\$$$$$$$ |\\$$$$$$  |      $$ | \\_/ $$ |\\$$$$$$  |$$$$$$$  |\\$$$$$$$\\\\$$$$$$$ |
+\\__|  \\__|\\__| \\_______| \\______/       \\__|     \\__| \\______/ \\_______/  \\_______|\\_______|
+                                                                                            
+                                                                                            
+                                                                                            `;
+  document.title = CONFIG.username + "@portfolio:~$";
+  document.getElementById("footer-line").textContent =
+    "[" + new Date().getFullYear() + "] " + CONFIG.displayName + " — session terminated with exit code 0";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  paintConfig();
+  renderNav();
+  renderSections();
+  renderContact();
+  initShell();
+
+  runBoot(() => {
+    document.getElementById("boot").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+  });
+});
+</script>
+</body>
+</html>
