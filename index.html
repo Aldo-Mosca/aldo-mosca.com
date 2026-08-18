@@ -291,13 +291,13 @@ footer.foot{
 
         <pre class="banner" id="banner"></pre>
         <div class="subtitle">
-          <span class="role" id="role-text">Software Developer</span> — <span id="tagline-text">embedded systems &amp; creative tinkering</span><br>
+          <span class="role" id="role-text">Software Developer</span> — <span id="tagline-text">embedded systems &amp; creative tinkering</span><br><br>
           <span class="meta">type <b>help</b> in the prompt below, or click a directory to jump there</span>
         </div>
 
         <!-- NAV -->
         <nav class="ls" aria-label="Section navigation">
-          <div class="prompt-line"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> ls -la ./portfolio</div>
+          <div class="prompt-line"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> ls -l ./portfolio</div>
           <div class="listing" id="nav-listing" role="list"></div>
         </nav>
 
@@ -306,14 +306,14 @@ footer.foot{
 
         <!-- CONTACT -->
         <section class="block" id="contact">
-          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">cat contact.txt</span></div>
+          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">cat about-me/contact.txt</span></div>
           <h2 class="file-head">contact.txt</h2>
           <ul class="contact-list" id="contact-list"></ul>
         </section>
 
         <!-- LIVE INTERACTIVE PROMPT -->
         <section class="block" id="live-terminal">
-          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">exec ./shell</span></div>
+          <div class="cmd-echo"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span> <span class="typed">exec /bin/shell</span></div>
           <div id="live-log"></div>
           <div class="live-row">
             <span class="prompt-line"><span class="prompt-user">guest</span>@<span class="prompt-path">portfolio</span><span class="prompt-sym">:~$</span></span>
@@ -339,20 +339,24 @@ const CONFIG = {
   username: "guest",
   displayName: "Aldo Mosca",
   role: "Software Developer",
-  tagline: "embedded systems & creative tinkering",
+  tagline: "QA engineer, embedded systems, video/music production, creative tinkering\n",
 
   about: {
     body: [
-      "Hi — I'm Aldo. I make things that hover over the intersection of hardware and software: firmware, protocol stacks, generative art, sound, and occasional soldering-iron wielding.",
-      "Lately I've been deep in embedded and IoT work — device commissioning, protocol compliance, and the kind of debugging that ends with a logic analyzer at 1am. Outside of that, I like projects with an immediate feedback loop: something that moves, makes sound, or lights up.",
-      "This site is organized like a filesystem, because that felt more honest than a hero image and a call-to-action button."
+      "Hi — I'm Aldo. I am a softwre engineer with lots of experience writing, testing, deploying and maintaining production code, generative art, audio and music projects, and occasionally, electronic circuits.",
+      "Most recently, I spent five months embedded with the HomeKit QA NPI team learning all about the Matter protocol and the Home app. I had hands-on experience with testing and reporting issues with customer-facing code at Apple. As a side project I developed software to add Matter capabilities to an off-the shelf humidifier, running on an ESP32 MCU.",
+      "Prior to that, with the Audio-Media Technologies group at Apple, I configured and deployed a performance-testing rack of computers to allow collecting extra KPI on a more timely manner",
+      "I currently work as a Creative Pro at Apple, where I teach customers how to interact with their technology. I have included projects from my creative side on this portfolio, to broaden its appeal",
+      "The basic structure of this site, the navigation, the flicker of the display and the boot sequence were all coded with the help of claude.ai but all the words that you read here, (plus the correcting of the Unix commands that claude hallucinated) are mine alone",
+      "Type 'help' at the prompt to move around, and/or click on stuff. Have fun, and -hey- hire me :-)"
     ]
   },
 
   // Each project: name, tag (small category label), stack (array), size (flavor text), summary (1-2 sentences)
   programming: [
-    { name: "project-alpha.cpp",  tag: "TOOLING",   stack: ["C++", "CMake"],        size: "2.4K loc", summary: "Replace with a real project — a CLI tool, library, or service you've built. One or two sentences on the problem it solves and the interesting technical decision behind it." },
-    { name: "project-beta.py",    tag: "AUTOMATION",stack: ["Python", "pytest"],    size: "890 loc",  summary: "Another slot for a programming project. Mention scale, constraints, or a bug you're proud of squashing." }
+    // { name: "FM Chatbot",  tag: "TOOLING",   stack: ["SwiftUI", "Apple Foundation Models"],        size: "2.4K loc", summary: "Replace with a real project — a CLI tool, library, or service you've built. One or two sentences on the problem it solves and the interesting technical decision behind it." },
+    { name: "FM Chatbot",  tag: "TOOLING",   stack: ["SwiftUI", "Apple Foundation Models"],        size: "2.4K loc", summary: "FM Chatbot is a SwiftUI chat app for Apple's on-device Foundation Models framework (iOS 26+), with each conversation persisted locally via SwiftData and rendered as a streaming, token-by-token reply in a chat-bubble UI. The most interesting lesson was how much SwiftData's @Model macro gives you for free — since ChatMessage is automatically Observable, streaming tokens into it by mutating a plain property was enough to make the UI update live, with no manual publishing, bindings, or view-model plumbing required." },
+    { name: "Sound Lab",    tag: "AUTOMATION",stack: ["Python", "pytest"],    size: "890 loc",  summary: "Another slot for a programming project. Mention scale, constraints, or a bug you're proud of squashing." }
   ],
   iot: [
     { name: "matter-node.fw",   tag: "FIRMWARE", stack: ["C++", "Matter", "Thread"], size: "firmware", summary: "A Matter/Thread device project — commissioning flow, cluster implementation, or a chiptool-based test harness. Describe the device and what protocol behavior you validated." },
@@ -378,11 +382,11 @@ const CONFIG = {
    RENDER — builds the DOM from CONFIG. You shouldn't need to touch this.
    ====================================================================== */
 const SECTIONS = [
-  { id: "about",       dir: "about-me",              perm: "drwxr-xr-x", cmd: "cat about.txt" },
-  { id: "programming", dir: "projects-programming",  perm: "drwxr-xr-x", cmd: "ls -la ./projects/programming" },
-  { id: "iot",         dir: "projects-iot",          perm: "drwxr-xr-x", cmd: "ls -la ./projects/iot" },
-  { id: "animation",   dir: "projects-animation",    perm: "drwxr-xr-x", cmd: "ls -la ./projects/animation" },
-  { id: "music",       dir: "projects-music",        perm: "drwxr-xr-x", cmd: "ls -la ./projects/music" }
+  { id: "about",       dir: "about-me",     perm: "drwxr-xr-x", cmd: "cat about-me/about.txt" },
+  { id: "programming", dir: "programming",  perm: "drwxr-xr-x", cmd: "ls -l ./portfolio/programming" },
+  { id: "iot",         dir: "iot",          perm: "drwxr-xr-x", cmd: "ls -l ./portfolio/iot" },
+  { id: "animation",   dir: "animation",    perm: "drwxr-xr-x", cmd: "ls -l ./portfolio/animation" },
+  { id: "music",       dir: "music",        perm: "drwxr-xr-x", cmd: "ls -l ./portfolio/music" }
 ];
 
 function el(tag, attrs={}, ...children){
@@ -432,8 +436,8 @@ function renderSections(){
   const about = el("section", { class:"block", id:"about" });
   about.appendChild(el("div", { class:"cmd-echo" },
     el("span", { class:"prompt-user" }, CONFIG.username), document.createTextNode("@"),
-    el("span", { class:"prompt-path" }, "portfolio"), el("span", { class:"prompt-sym" }, ":~$ "),
-    el("span", { class:"typed" }, "cat about.txt")
+    el("span", { class:"prompt-path" }, "portfolio/"), el("span", { class:"prompt-sym" }, ":~$ "),
+    el("span", { class:"typed" }, "cat about-me/about.txt")
   ));
   about.appendChild(el("h2", { class:"file-head" }, "about.txt"));
   CONFIG.about.body.forEach(line => about.appendChild(el("p", {}, line)));
@@ -441,17 +445,17 @@ function renderSections(){
 
   // project sections
   const groups = [
-    { id:"programming", title:"./projects/programming/", data: CONFIG.programming },
-    { id:"iot",         title:"./projects/iot/",         data: CONFIG.iot },
-    { id:"animation",   title:"./projects/animation/",   data: CONFIG.animation },
-    { id:"music",       title:"./projects/music/",       data: CONFIG.music }
+    { id:"programming", title:"./portfolio/programming/", data: CONFIG.programming },
+    { id:"iot",         title:"./portfolio/iot/",         data: CONFIG.iot },
+    { id:"animation",   title:"./portfolio/animation/",   data: CONFIG.animation },
+    { id:"music",       title:"./portfolio/music/",       data: CONFIG.music }
   ];
   groups.forEach(g => {
     const sec = el("section", { class:"block", id:g.id });
     sec.appendChild(el("div", { class:"cmd-echo" },
       el("span", { class:"prompt-user" }, CONFIG.username), document.createTextNode("@"),
       el("span", { class:"prompt-path" }, "portfolio"), el("span", { class:"prompt-sym" }, ":~$ "),
-      el("span", { class:"typed" }, "ls -la " + g.title)
+      el("span", { class:"typed" }, "ls -l " + g.title)
     ));
     sec.appendChild(el("h2", { class:"file-head" }, g.title));
     g.data.forEach(p => sec.appendChild(projectEntry(p)));
@@ -538,10 +542,10 @@ function initShell(){
         break;
       }
       case "about": jumpTo("about","about-me"); print("→ jumped to about-me"); break;
-      case "programming": jumpTo("programming","projects-programming"); print("→ jumped to projects/programming"); break;
-      case "animation": jumpTo("animation","projects-animation"); print("→ jumped to projects/animation"); break;
-      case "music": jumpTo("music","projects-music"); print("→ jumped to projects/music"); break;
-      case "iot": jumpTo("iot","projects-iot"); print("→ jumped to projects/iot"); break;
+      case "programming": jumpTo("programming","programming"); print("→ jumped to portfolio/programming"); break;
+      case "animation": jumpTo("animation","animation"); print("→ jumped to portfolio/animation"); break;
+      case "music": jumpTo("music","music"); print("→ jumped to portfolio/music"); break;
+      case "iot": jumpTo("iot","iot"); print("→ jumped to portfolio/iot"); break;
       case "contact": jumpTo("contact","contact"); print("→ jumped to contact"); break;
       case "whoami": print(CONFIG.username); break;
       case "date": print(new Date().toString()); break;
@@ -576,7 +580,7 @@ const BOOT_LINES = [
   "Initializing display ........... OK",
   "Loading drivers................. OK",
   "Frobulating..................... OK",
-  "Mounting /home/" + CONFIG.username + "..................... OK",
+  "Mounting /home/" + CONFIG.username + "............ OK",
   "Starting terminal session..............",
   "",
   "Welcome. Type 'help' once loaded to begin."
@@ -626,7 +630,21 @@ $$ |  $$ |$$ |\\$$$$$$$ |\\$$$$$$  |      $$ | \\_/ $$ |\\$$$$$$  |$$$$$$$  |\\$
 \\__|  \\__|\\__| \\_______| \\______/       \\__|     \\__| \\______/ \\_______/  \\_______|\\_______|
                                                                                             
                                                                                             
-                                                                                            `;
+`;
+//   document.getElementById("banner").textContent =
+// `
+// [0;37;40m [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m  [0;94;1;44m     [0;34;40m▀[0;37;40m   [0;94;1;44m     [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m        [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄█▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m [0m
+// [0;34;40m▐[0;94;1;44m  ░░[0;34;40m▄[0;94;1;44m [0;34;40m▌[0;37;40m [0;94;1;44m   ░░[0;37;40m    [0;94;1;44m   ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m      [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m█[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;34;40m▄[0;94;1;44m [0;34;40m▌[0m
+// [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m    [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m      [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;34;40m█[0;94;1;44m░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0m
+// [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m    [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m      [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0m
+// [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m    [0;94;1;44m▒▓▓█[0;94;1;40m▀[0;37;40m [0;94;1;44m▓█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m      [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;40m▐[0;94;1;44m▓▓[0;94;1;40m█▀▄[0;37;40m [0;94;1;40m▀[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m  [0;94;1;40m▀[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0m
+// [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m  [0;36;40m▄[0;37;40m [0;94;1;44m▓█[0;94;1;40m▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m      [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m  [0;94;1;40m▀▀[0;36;40m▄[0;37;40m  [0;36;40m▀▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m  [0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0m
+// [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m      [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m  [0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0m
+// [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m      [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0m
+// [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m      [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0m
+// [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m      [0;96;1;40m█[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0m
+// [0;96;1;46m▓████[0;37;40m [0;96;1;40m██[0;37;40m [0;96;1;46m▓████[0;96;1;40m▄██[0;37;40m [0;96;1;46m▓████[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m       [0;96;1;40m██[0;96;1;46m███[0;37;40m [0;96;1;40m██[0;37;40m [0;96;1;40m██[0;37;40m  [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄██[0;37;40m [0;96;1;46m▓████[0;37;40m [0;96;1;40m██[0m
+// `;
   document.title = CONFIG.username + "@portfolio:~$";
   document.getElementById("footer-line").textContent =
     "[" + new Date().getFullYear() + "] " + CONFIG.displayName + " — session terminated with exit code 0";
