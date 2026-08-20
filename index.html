@@ -352,23 +352,22 @@ const CONFIG = {
     ]
   },
 
-  // Each project: name, tag (small category label), stack (array), size (flavor text), summary (1-2 sentences)
+  // Each project: name, tag (small category label), stack (array), size (flavor text), summary (1-2 sentences), url (repo link), label (link text), mediaUrl (picture/video link), mediaLabel (media link text)
   programming: [
-    // { name: "FM Chatbot",  tag: "TOOLING",   stack: ["SwiftUI", "Apple Foundation Models"],        size: "2.4K loc", summary: "Replace with a real project — a CLI tool, library, or service you've built. One or two sentences on the problem it solves and the interesting technical decision behind it." },
-    { name: "FM Chatbot",  tag: "TOOLING",   stack: ["SwiftUI", "Apple Foundation Models"],        size: "2.4K loc", summary: "FM Chatbot is a SwiftUI chat app for Apple's on-device Foundation Models framework (iOS 26+), with each conversation persisted locally via SwiftData and rendered as a streaming, token-by-token reply in a chat-bubble UI. The most interesting lesson was how much SwiftData's @Model macro gives you for free — since ChatMessage is automatically Observable, streaming tokens into it by mutating a plain property was enough to make the UI update live, with no manual publishing, bindings, or view-model plumbing required." },
-    { name: "Sound Lab",    tag: "AUTOMATION",stack: ["Python", "pytest"],    size: "890 loc",  summary: "Another slot for a programming project. Mention scale, constraints, or a bug you're proud of squashing." }
+    { name: "FM Chatbot",  tag: "TOOLING",   stack: ["SwiftUI", "Apple Foundation Models"],        size: "2.4K loc", summary: "FM Chatbot is a SwiftUI chat app for Apple's on-device Foundation Models framework (iOS 26+), with each conversation persisted locally via SwiftData and rendered as a streaming, token-by-token reply in a chat-bubble UI. The most interesting lesson was how much SwiftData's @Model macro gives you for free — since ChatMessage is automatically Observable, streaming tokens into it by mutating a plain property was enough to make the UI update live, with no manual publishing, bindings, or view-model plumbing required.", url: "https://github.com/aldo-mosca/fm-chatbot", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" },
+    { name: "Sound Lab",    tag: "AUTOMATION",stack: ["Python", "pytest"],    size: "890 loc",  summary: "Another slot for a programming project. Mention scale, constraints, or a bug you're proud of squashing.", url: "https://github.com/aldo-mosca/sound-lab", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   iot: [
-    { name: "matter-node.fw",   tag: "FIRMWARE", stack: ["C++", "Matter", "Thread"], size: "firmware", summary: "A Matter/Thread device project — commissioning flow, cluster implementation, or a chiptool-based test harness. Describe the device and what protocol behavior you validated." },
-    { name: "thermostat-rig",  tag: "HARDWARE", stack: ["ESP32", "KiCad"],          size: "hardware", summary: "A hardware-adjacent IoT build — wiring, sensor integration, or a custom board. Note what it controls and how it talks to the network." }
+    { name: "matter-node.fw",   tag: "FIRMWARE", stack: ["C++", "Matter", "Thread"], size: "firmware", summary: "A Matter/Thread device project — commissioning flow, cluster implementation, or a chiptool-based test harness. Describe the device and what protocol behavior you validated.", url: "https://github.com/aldo-mosca/matter-node-fw", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" },
+    { name: "thermostat-rig",  tag: "HARDWARE", stack: ["ESP32", "KiCad"],          size: "hardware", summary: "A hardware-adjacent IoT build — wiring, sensor integration, or a custom board. Note what it controls and how it talks to the network.", url: "https://github.com/aldo-mosca/thermostat-rig", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   animation: [
-    { name: "loop-01.mov",  tag: "MOTION",  stack: ["After Effects"], size: "0:14", summary: "Swap in a real animation project — a short loop, title sequence, or generative piece. Note the tools and what you were exploring." },
-    { name: "study-02.mp4", tag: "STUDY",   stack: ["Blender"],       size: "0:08", summary: "A second animation slot. Link to a hosted video if you have one." }
+    { name: "loop-01.mov",  tag: "MOTION",  stack: ["After Effects"], size: "0:14", summary: "Swap in a real animation project — a short loop, title sequence, or generative piece. Note the tools and what you were exploring.", url: "https://github.com/aldo-mosca/loop-01", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" },
+    { name: "study-02.mp4", tag: "STUDY",   stack: ["Blender"],       size: "0:08", summary: "A second animation slot. Link to a hosted video if you have one.", url: "https://github.com/aldo-mosca/study-02", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   music: [
-    { name: "track-01.wav", tag: "COMPOSITION", stack: ["Ableton"], size: "3:12", summary: "Drop in a real track — genre, instrumentation, or the concept behind it. Link out to Bandcamp/SoundCloud if hosted elsewhere." },
-    { name: "track-02.wav", tag: "SOUND-DESIGN", stack: ["Max/MSP"], size: "2:05", summary: "A second music slot, e.g. sound design work, a collaboration, or a live set." }
+    { name: "track-01.wav", tag: "COMPOSITION", stack: ["Ableton"], size: "3:12", summary: "Drop in a real track — genre, instrumentation, or the concept behind it. Link out to Bandcamp/SoundCloud if hosted elsewhere.", url: "https://github.com/aldo-mosca/track-01", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" },
+    { name: "track-02.wav", tag: "SOUND-DESIGN", stack: ["Max/MSP"], size: "2:05", summary: "A second music slot, e.g. sound design work, a collaboration, or a live set.", url: "https://github.com/aldo-mosca/track-02", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
 
   contact: [
@@ -422,8 +421,12 @@ function projectEntry(p){
   );
   const body = el("div", { class:"body" },
     el("p", {}, p.summary),
-    el("p", { class:"stack" }, "stack: " + p.stack.map(s=>s).join(", "))
+    el("p", { class:"stack" }, "stack: " + p.stack.map(s=>s).join(", ")),
+    el("p", { class:"link" }, el("a", { href: p.url, target:"_blank", rel:"noopener" }, p.label))
   );
+  if(p.mediaUrl){
+    body.appendChild(el("p", { class:"link" }, el("a", { href: p.mediaUrl, target:"_blank", rel:"noopener" }, p.mediaLabel)));
+  }
   entry.appendChild(summary);
   entry.appendChild(body);
   return entry;
