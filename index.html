@@ -358,7 +358,7 @@ const CONFIG = {
     { name: "Sound Lab",    tag: "Visualizers",stack: ["JavScript"],    size: "660K",  summary: "A series of visualizers that read sound from your device's built-in microphone and makes pretty pictures that are synchronized to the sounds around you", gitHubUrl: "https://github.com/aldo-mosca/sound-lab", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   iot: [
-    { name: "Matter Humidifier",   tag: "MATTER", stack: ["Embedded Swift", "Matter", "ESP32"], size: "952M", summary: "Added Matter capability to an inexpensive off-the-shelf humidifier. The magic was achieved by adding an ESP-32 MCU and modifying sample code from WWDC24.", gitHubUrl: "https://github.com/Aldo-Mosca/iot-projects", label: "View on GitHub", mediaUrl: "portfolio/iot/Humidifier-demo-01.mov", mediaLabel: "View Media" } //,
+    { name: "Matter Humidifier",   tag: "MATTER", stack: ["Embedded Swift", "Matter", "ESP32"], size: "952M", summary: "Added Matter capability to an inexpensive off-the-shelf humidifier. The magic was achieved by adding an ESP-32 MCU and modifying sample code from WWDC24. I was able to implement this only with OnOff clusters. ModeSelect was roundly rejected by the Home app...", gitHubUrl: "https://github.com/Aldo-Mosca/iot-projects", label: "View on GitHub", mediaUrl: "portfolio/iot/Humidifier-demo-01.mov", mediaLabel: "View demo video" } //,
     // { name: "thermostat-rig",  tag: "HARDWARE", stack: ["ESP32", "KiCad"],          size: "hardware", summary: "A hardware-adjacent IoT build — wiring, sensor integration, or a custom board. Note what it controls and how it talks to the network.", gitHubUrl: "https://github.com/aldo-mosca/thermostat-rig", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   animation: [
@@ -423,11 +423,18 @@ function projectEntry(p){
     el("p", {}, p.summary),
     el("p", { class:"stack" }, "stack: " + p.stack.map(s=>s).join(", "))
   );
-  if(p.gitHubUrl){
-    body.appendChild(el("p", { class:"link" }, el("a", { href: p.gitHubUrl, target:"_blank", rel:"noopener" }, p.label)));
-  }
-  if(p.mediaUrl){
-    body.appendChild(el("p", { class:"link" }, el("a", { href: p.mediaUrl, target:"_blank", rel:"noopener" }, p.mediaLabel)));
+  if(p.gitHubUrl || p.mediaUrl){
+    const links = el("p", { class:"link" });
+    if(p.gitHubUrl){
+      links.appendChild(el("a", { href: p.gitHubUrl, target:"_blank", rel:"noopener" }, p.label));
+    }
+    if(p.gitHubUrl && p.mediaUrl){
+      links.appendChild(document.createTextNode("  |  "));
+    }
+    if(p.mediaUrl){
+      links.appendChild(el("a", { href: p.mediaUrl, target:"_blank", rel:"noopener" }, p.mediaLabel));
+    }
+    body.appendChild(links);
   }
   entry.appendChild(summary);
   entry.appendChild(body);
