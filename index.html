@@ -88,8 +88,13 @@ a{ color:var(--fg-bright); }
   font-size:14px;
   white-space:pre-wrap;
   overflow:hidden;
+  cursor:pointer;
 }
 #boot.hidden{ display:none; }
+#boot-skip-hint{
+  position:absolute; right:4vw; bottom:4vh;
+  color:var(--fg-dim); font-size:12px;
+}
 #boot .cursor-blink{ animation:blink 1s steps(1) infinite; }
 
 /* ============ LAYOUT / WINDOW CHROME ============ */
@@ -275,7 +280,7 @@ footer.foot{
 <div class="crt-flicker"></div>
 
 <!-- ===================== BOOT SEQUENCE ===================== -->
-<div id="boot"><span id="boot-text"></span><span class="cursor-blink">▊</span></div>
+<div id="boot"><span id="boot-text"></span><span class="cursor-blink">▊</span><div id="boot-skip-hint">click / tap to skip</div></div>
 
 <!-- ===================== MAIN APP ===================== -->
 <div id="app" class="hidden">
@@ -599,17 +604,35 @@ const BOOT_LINES = [
 ];
 
 function runBoot(cb){
+  const bootEl = document.getElementById("boot");
   const bootTextEl = document.getElementById("boot-text");
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let done = false, skipped = false;
+  function finish(){
+    if(done) return;
+    done = true;
+    cb();
+  }
+  function skip(){
+    if(skipped || done) return;
+    skipped = true;
+    bootTextEl.textContent = BOOT_LINES.join("\n");
+    finish();
+  }
+  bootEl.addEventListener("click", skip);
+  bootEl.addEventListener("touchstart", skip, { passive:true });
+
   if(prefersReduced){
     bootTextEl.textContent = BOOT_LINES.join("\n");
-    setTimeout(cb, 300);
+    setTimeout(finish, 300);
     return;
   }
   let li = 0, ci = 0;
   let buffer = "";
   function step(){
-    if(li >= BOOT_LINES.length){ setTimeout(cb, 350); return; }
+    if(skipped) return;
+    if(li >= BOOT_LINES.length){ setTimeout(finish, 350); return; }
     const line = BOOT_LINES[li];
     if(ci <= line.length){
       bootTextEl.textContent = buffer + line.slice(0, ci);
