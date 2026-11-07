@@ -367,11 +367,11 @@ const CONFIG = {
     // { name: "thermostat-rig",  tag: "HARDWARE", stack: ["ESP32", "KiCad"],          size: "hardware", summary: "A hardware-adjacent IoT build — wiring, sensor integration, or a custom board. Note what it controls and how it talks to the network.", gitHubUrl: "https://github.com/aldo-mosca/thermostat-rig", label: "View on GitHub", mediaUrl: "", mediaLabel: "View Media" }
   ],
   animation: [
-    { name: "Turntable Collection",  tag: "MODELING->COMPOSITING",  stack: ["Blender, Koala Sampler, Logic Pro"], size: "5M", summary: "I modeled the turntable from the default cube, then animated the platter. The label can be easily changed. This project uses Blender from modeling and animation, to creating the final video file with the sequence editor, and modulating the amount of chromatic aberration to the tempo of the kick/bass in the compositor", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/animation/Turntable.mp4", mediaLabel: "View Video" },
+    { name: "Turntable Collection",  tag: "MODELING->COMPOSITING",  stack: ["Blender, Koala Sampler, Logic Pro"], size: "5M", summary: "I modeled the turntable from the default cube, then animated the platter. The label is an external jpeg file and can be easily changed. This project uses Blender from modeling and animation, to creating the final video file with the sequence editor, and modulating the amount of chromatic aberration to the tempo of the kick/bass in the compositor", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/animation/Turntable.mp4", mediaLabel: "View Video" },
     { name: "MPC Study", tag: "3D MUSIC VISUALIZER",   stack: ["Blender, LumaFusion, Koala Sampler"], size: "1:00", summary: "The entire video project was created in Blender. Modeled the MPC once, then for every project, the pipeline from screen capture of the song's performance to fully synchronized video can be achieved in about eight hours for a two-minute music video", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/animation/MPC-showcase.mp4", mediaLabel: "View Media" }
   ],
   music: [
-    { name: "Capoeira Beat", tag: "SAMPLE-BASED", stack: ["Korg Gadget, Blender"], size: "1:00", summary: "I scanned myself into an USDZ file as part of studying how to do photogrammetry with smartphones and a mac mini. After I rigged the mesh in Blender, I was able to import some dance animations from Mixamo. I then modeled a futuristic video game scene and wrote a Capoeira-inspired beat to match the Mixamo dance", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/music/Capoeira-Beat.mp4", mediaLabel: "View Video" },
+    { name: "Capoeira Beat", tag: "SAMPLE-BASED", stack: ["Korg Gadget, Blender"], size: "1:00", summary: "I scanned myself into an USDZ file as part of studying how to do photogrammetry with smartphones and a mac mini. After rigging the mesh in Blender, I imported a dance animation from Mixamo. For a stage, I then modeled a futuristic video game machine and wrote a Capoeira-inspired beat to match the Mixamo dance", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/music/Capoeira-Beat.mp4", mediaLabel: "View Video" },
     { name: "The Rapture of the Monobloc", tag: "SYNTH PROGRAMMING, GEOMETRY NODES", stack: ["Logic Pro for iPad, Blender"], size: "0:55", summary: "A little tune I wrote in Logic Pro for iPad to go with an animation I made using Blender Geometry Nodes", gitHubUrl: "", label: "View on GitHub", mediaUrl: "portfolio/music/the-rapture-of-the-monobloc.MP4", mediaLabel: "View Media" }
   ],
 
@@ -654,39 +654,104 @@ function paintConfig(){
   document.getElementById("titlebar-path").textContent = CONFIG.username + "@portfolio: ~";
   document.getElementById("role-text").textContent = CONFIG.role;
   document.getElementById("tagline-text").textContent = CONFIG.tagline;
-  document.getElementById("banner").textContent =
-` $$$$$$\\  $$\\       $$\\                 $$\\      $$\\                                        
-$$  __$$\\ $$ |      $$ |                $$$\\    $$$ |                                       
-$$ /  $$ |$$ | $$$$$$$ | $$$$$$\\        $$$$\\  $$$$ | $$$$$$\\   $$$$$$$\\  $$$$$$$\\ $$$$$$\\  
-$$$$$$$$ |$$ |$$  __$$ |$$  __$$\\       $$\\$$\\$$ $$ |$$  __$$\\ $$  _____|$$  _____|\\____$$\\ 
-$$  __$$ |$$ |$$ /  $$ |$$ /  $$ |      $$ \\$$$  $$ |$$ /  $$ |\\$$$$$$\\  $$ /      $$$$$$$ |
-$$ |  $$ |$$ |$$ |  $$ |$$ |  $$ |      $$ |\\$  /$$ |$$ |  $$ | \\____$$\\ $$ |     $$  __$$ |
-$$ |  $$ |$$ |\\$$$$$$$ |\\$$$$$$  |      $$ | \\_/ $$ |\\$$$$$$  |$$$$$$$  |\\$$$$$$$\\\\$$$$$$$ |
-\\__|  \\__|\\__| \\_______| \\______/       \\__|     \\__| \\______/ \\_______/  \\_______|\\_______|
-                                                                                            
-                                                                                            
-`;
-//   document.getElementById("banner").textContent =
-// `
-// [0;37;40m [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m  [0;94;1;44m     [0;34;40m▀[0;37;40m   [0;94;1;44m     [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m        [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄█▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m   [0;34;40m▄[0;94;1;44m   [0;34;40m▀▄[0;37;40m [0m
-// [0;34;40m▐[0;94;1;44m  ░░[0;34;40m▄[0;94;1;44m [0;34;40m▌[0;37;40m [0;94;1;44m   ░░[0;37;40m    [0;94;1;44m   ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m      [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m█[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;37;40m [0;94;1;44m [0;34;40m▌[0;37;40m [0;34;40m▐[0;94;1;44m  ░░[0;34;40m▄[0;94;1;44m [0;34;40m▌[0m
-// [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m    [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m      [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;34;40m█[0;94;1;44m░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0;37;40m [0;94;1;44m ░░▒▒[0;37;40m [0;94;1;44m░▒[0m
-// [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m    [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m      [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0;37;40m [0;94;1;44m░▒▒▓▓[0;37;40m [0;94;1;44m▒▓[0m
-// [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m    [0;94;1;44m▒▓▓█[0;94;1;40m▀[0;37;40m [0;94;1;44m▓█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m      [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0;37;40m [0;94;1;40m▐[0;94;1;44m▓▓[0;94;1;40m█▀▄[0;37;40m [0;94;1;40m▀[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m  [0;94;1;40m▀[0;37;40m [0;94;1;44m▒▓▓[0;94;1;40m█▀[0;37;40m [0;94;1;44m▓[0;94;1;40m█[0m
-// [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m  [0;36;40m▄[0;37;40m [0;94;1;44m▓█[0;94;1;40m▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m      [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0;37;40m  [0;94;1;40m▀▀[0;36;40m▄[0;37;40m  [0;36;40m▀▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m  [0;36;40m▄[0;37;40m [0;94;1;44m▓[0;94;1;40m█▀[0;36;40m▄█[0;37;40m [0;94;1;40m▀[0;36;40m▄[0m
-// [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m      [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m  [0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0;37;40m [0;94;1;40m▀[0;36;40m▄█[0;96;1;46m░░[0;37;40m [0;36;40m█[0;96;1;46m░[0m
-// [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m      [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0;37;40m [0;36;40m█[0;96;1;46m░░▒▒[0;37;40m [0;96;1;46m░▒[0m
-// [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m      [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0;37;40m [0;96;1;46m░▒▒▓▓[0;37;40m [0;96;1;46m▒▓[0m
-// [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m      [0;96;1;40m█[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m▌[0;37;40m [0;96;1;40m▐[0;96;1;46m▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0;37;40m [0;96;1;46m▒▓▓██[0;37;40m [0;96;1;46m▓[0;96;1;40m█[0m
-// [0;96;1;46m▓████[0;37;40m [0;96;1;40m██[0;37;40m [0;96;1;46m▓████[0;96;1;40m▄██[0;37;40m [0;96;1;46m▓████[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m       [0;96;1;40m██[0;96;1;46m███[0;37;40m [0;96;1;40m██[0;37;40m [0;96;1;40m██[0;37;40m  [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄▀[0;37;40m   [0;96;1;40m▀[0;96;1;46m███[0;96;1;40m▄██[0;37;40m [0;96;1;46m▓████[0;37;40m [0;96;1;40m██[0m
-// `;
   document.title = CONFIG.username + "@portfolio:~$";
   document.getElementById("footer-line").textContent =
     "[" + new Date().getFullYear() + "] " + CONFIG.displayName + " — session terminated with exit code 0";
 }
 
+// Filenames under portfolio/about-me/names/ — each holds the banner text
+// pre-rendered in a different ASCII-art font. Hardcoded because static
+// hosting (GitHub Pages) has no directory listing for JS to discover them.
+const NAME_BANNER_FILES = [
+  "Advocate", "Ansiltr3", "BIG!Limpy", "BigMoney-ne", "BigMoney-nw",
+  "Blocktronics", "Bloody", "Blow Torch", "BlurVision", "Bolger",
+  "Broadway", "Cyberlarge", "Future", "Nscript", "NYscript",
+  "Terrace", "Univers"
+];
+
+const FALLBACK_BANNER =
+` $$$$$$\\  $$\\       $$\\                 $$\\      $$\\
+$$  __$$\\ $$ |      $$ |                $$$\\    $$$ |
+$$ /  $$ |$$ | $$$$$$$ | $$$$$$\\        $$$$\\  $$$$ | $$$$$$\\   $$$$$$$\\  $$$$$$$\\ $$$$$$\\
+$$$$$$$$ |$$ |$$  __$$ |$$  __$$\\       $$\\$$\\$$ $$ |$$  __$$\\ $$  _____|$$  _____|\\____$$\\
+$$  __$$ |$$ |$$ /  $$ |$$ /  $$ |      $$ \\$$$  $$ |$$ /  $$ |\\$$$$$$\\  $$ /      $$$$$$$ |
+$$ |  $$ |$$ |$$ |  $$ |$$ |  $$ |      $$ |\\$  /$$ |$$ |  $$ | \\____$$\\ $$ |     $$  __$$ |
+$$ |  $$ |$$ |\\$$$$$$$ |\\$$$$$$  |      $$ | \\_/ $$ |\\$$$$$$  |$$$$$$$  |\\$$$$$$$\\\\$$$$$$$ |
+\\__|  \\__|\\__| \\_______| \\______/       \\__|     \\__| \\______/ \\_______/  \\_______|\\_______|
+
+
+`;
+
+// Classic 16-color ANSI/CGA palette, as used by textmode/ANSI-art scenes.
+const ANSI_FG = {
+  30:"#000000", 31:"#aa0000", 32:"#00aa00", 33:"#aa5500",
+  34:"#0000aa", 35:"#aa00aa", 36:"#00aaaa", 37:"#aaaaaa",
+  90:"#555555", 91:"#ff5555", 92:"#55ff55", 93:"#ffff55",
+  94:"#5555ff", 95:"#ff55ff", 96:"#55ffff", 97:"#ffffff"
+};
+const ANSI_BG = {
+  40:"#000000", 41:"#aa0000", 42:"#00aa00", 43:"#aa5500",
+  44:"#0000aa", 45:"#aa00aa", 46:"#00aaaa", 47:"#aaaaaa",
+  100:"#555555", 101:"#ff5555", 102:"#55ff55", 103:"#ffff55",
+  104:"#5555ff", 105:"#ff55ff", 106:"#55ffff", 107:"#ffffff"
+};
+
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// Converts ANSI SGR (color) escape codes to HTML spans; plain text passes
+// through HTML-escaped with no spans. Safe to use unconditionally since the
+// source files are trusted repo assets, not user input.
+function ansiToHtml(text){
+  const SGR_RE = /\x1b\[([0-9;]*)m/g;
+  let html = "", fg = null, bg = null, bold = false, open = false, last = 0, m;
+
+  function flushSpan(){
+    if(open){ html += "</span>"; open = false; }
+    const styles = [];
+    if(fg) styles.push("color:" + fg);
+    if(bg) styles.push("background:" + bg);
+    if(bold) styles.push("font-weight:bold");
+    if(styles.length){ html += '<span style="' + styles.join(";") + '">'; open = true; }
+  }
+
+  while((m = SGR_RE.exec(text)) !== null){
+    if(m.index > last) html += escapeHtml(text.slice(last, m.index));
+    last = SGR_RE.lastIndex;
+    const codes = m[1].split(";").filter(c => c !== "").map(Number);
+    if(codes.length === 0) codes.push(0);
+    for(const code of codes){
+      if(code === 0){ fg = null; bg = null; bold = false; }
+      else if(code === 1){ bold = true; }
+      else if(code === 22){ bold = false; }
+      else if(code === 39){ fg = null; }
+      else if(code === 49){ bg = null; }
+      else if(ANSI_FG[code]) fg = ANSI_FG[code];
+      else if(ANSI_BG[code]) bg = ANSI_BG[code];
+    }
+    flushSpan();
+  }
+  if(last < text.length) html += escapeHtml(text.slice(last));
+  if(open) html += "</span>";
+  return html;
+}
+
+async function paintBanner(){
+  const bannerEl = document.getElementById("banner");
+  const file = NAME_BANNER_FILES[Math.floor(Math.random() * NAME_BANNER_FILES.length)];
+  try{
+    const res = await fetch("portfolio/about-me/names/" + encodeURIComponent(file));
+    if(!res.ok) throw new Error("HTTP " + res.status);
+    bannerEl.innerHTML = ansiToHtml(await res.text());
+  } catch(err){
+    bannerEl.textContent = FALLBACK_BANNER;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   paintConfig();
+  paintBanner();
   renderNav();
   renderSections();
   renderContact();
